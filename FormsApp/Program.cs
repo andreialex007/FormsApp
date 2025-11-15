@@ -2,9 +2,9 @@ using System.Reflection;
 using FluentValidation;
 using FormsApp.Common;
 using FormsApp.Core.Data;
-using FormsApp.Core.Data.Entities;
 using FormsApp.Core.Services.Submissions;
 using FormsApp.Core.Services.Submissions.Dto;
+using FormsApp.Data;
 using FormsApp.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -34,23 +34,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     context.Database.EnsureCreated();
-
-    if (!context.Submissions.Any())
-    {
-        context.Submissions.AddRange(
-            new Submission
-            {
-                Content = "Sample submission 1",
-                Created = DateTime.UtcNow.AddDays(-2)
-            },
-            new Submission
-            {
-                Content = "Sample submission 2",
-                Created = DateTime.UtcNow.AddDays(-1)
-            }
-        );
-        context.SaveChanges();
-    }
+    DatabaseSeeder.Seed(context);
 }
 
 if (app.Environment.IsDevelopment())
