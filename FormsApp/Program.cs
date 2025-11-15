@@ -1,25 +1,25 @@
+using System.Reflection;
+using FormsApp.Common;
 using FormsApp.Core.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Configure Entity Framework with InMemory database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("FormsAppDb"));
 
+// Register services
+builder.Services.AddScoped<FormsApp.Core.Services.Submission.SubmissionService>();
+
 var app = builder.Build();
 
-// Seed the database with initial data
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     context.Database.EnsureCreated();
 
-    // Optional: Add seed data if database is empty
     if (!context.Submissions.Any())
     {
         context.Submissions.AddRange(
@@ -38,13 +38,23 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
+
+// Discover and map all endpoints
+var endpointTypes = Assembly.GetExecutingAssembly()
+    .GetTypes()
+    .Where(t => typeof(IEndpoint).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
+
+foreach (var endpointType in endpointTypes)
+{
+    var endpoint = (IEndpoint)Activator.CreateInstance(endpointType)!;
+    endpoint.Map(app);
+}
 
 var summaries = new[]
 {
