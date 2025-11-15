@@ -10,8 +10,8 @@ export class HomeStore extends NavItem{
   message = 'hello world'
   count = 0
 
-  name = 'Home';
-  icon = 'home-2-fill';
+  name = 'Dashboard';
+  icon = 'dashboard-fill';
   url = '/';
 
   constructor() {
