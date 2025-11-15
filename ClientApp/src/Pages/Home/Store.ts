@@ -1,16 +1,29 @@
-import { makeAutoObservable } from 'mobx'
+import { makeObservable, observable, computed, action } from 'mobx'
 import { capitalize } from 'lodash'
+import NavItem from "../../Common/NavItem.ts";
 
 export interface Props {
-  store: HelloStore
+  store: HomeStore
 }
 
-export class HelloStore {
+export class HomeStore extends NavItem{
   message = 'hello world'
   count = 0
 
+  name = 'Home';
+  icon = 'home-2-fill';
+  url = '/';
+
   constructor() {
-    makeAutoObservable(this)
+    super();
+    makeObservable(this, {
+      message: observable,
+      count: observable,
+      formattedMessage: computed,
+      setMessage: action,
+      increment: action,
+      decrement: action
+    })
   }
 
   get formattedMessage(): string {
@@ -27,6 +40,10 @@ export class HelloStore {
 
   decrement() {
     this.count--
+  }
+
+  override isActive(currentLocation: string): boolean {
+    return currentLocation === this.url;
   }
 }
 
