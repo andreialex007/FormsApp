@@ -1,23 +1,48 @@
-import { makeAutoObservable } from 'mobx'
-import { HomeStore } from './Pages/Home/Store'
-import { AboutStore } from './Pages/About/Store'
+import { makeObservable, observable, computed, action } from 'mobx'
+import type NavItem from './Common/NavItem'
+import { Utilities } from './Common/Utilities'
+import HomeStore from './Pages/Home/Store'
+import AboutStore from './Pages/About/Store'
+import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
 export class AppStore {
-  homeStore: HomeStore
-  aboutStore: AboutStore
+  homeStore = new HomeStore()
+  aboutStore = new AboutStore()
+
+  navItems : Array<NavItem> = [
+    this.homeStore,
+    this.aboutStore
+  ]
 
   constructor() {
-    this.homeStore = new HomeStore()
-    this.aboutStore = new AboutStore()
-    makeAutoObservable(this)
+    makeObservable(this, {
+      homeStore: observable,
+      aboutStore: observable,
+      navItems: observable,
+      allPages: computed
+    })
   }
 
-  // Add global app methods here if needed
-  reset() {
-    this.homeStore = new HomeStore()
-    this.aboutStore = new AboutStore()
+  getActivePage(location: string) {
+    return this.navItems.find(x => x.isActive(location))
+  }
+
+  get allPages() {
+    return Utilities.discoverAllPages(this.navItems)
   }
 }
 
-// Create a singleton instance
 export const appStore = new AppStore()
+
+const routes: RouteRecordRaw[] = appStore.allPages.map(page => ({
+  path: page.store.url,
+  name: page.store.name,
+  component: page.component,
+  props: { store: page.store }
+}))
+
+export const router = createRouter({
+  history: createWebHistory(),
+  routes
+})

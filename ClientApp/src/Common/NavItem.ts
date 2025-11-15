@@ -1,5 +1,3 @@
-import { computed, observable } from 'mobx';
-
 export default abstract class NavItem {
     protected constructor() {}
 

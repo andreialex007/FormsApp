@@ -2,10 +2,10 @@ import { makeObservable, observable, computed, action } from 'mobx'
 import NavItem from '../../Common/NavItem';
 
 export interface Props {
-  store: AboutStore
+  store: Store
 }
 
-export class AboutStore extends NavItem{
+export default class Store extends NavItem{
   version = '1.0.0'
   year = new Date().getFullYear()
   features: string[] = ['Vue 3', 'TypeScript', 'Vite', 'Tailwind CSS', 'Ark UI', 'MobX']

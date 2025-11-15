@@ -3,10 +3,10 @@ import { capitalize } from 'lodash'
 import NavItem from "../../Common/NavItem.ts";
 
 export interface Props {
-  store: HomeStore
+  store: Store
 }
 
-export class HomeStore extends NavItem{
+export default class Store extends NavItem{
   message = 'hello world'
   count = 0
 
