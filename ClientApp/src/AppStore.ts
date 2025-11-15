@@ -3,21 +3,29 @@ import type NavItem from './Common/NavItem'
 import { Utilities } from './Common/Utilities'
 import HomeStore from './Pages/Home/Store'
 import AboutStore from './Pages/About/Store'
+import SubmitStore from './Pages/Submit/Store'
+import ItemsStore from './Pages/Items/Store'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 export class AppStore {
   homeStore = new HomeStore()
+  submitStore = new SubmitStore()
+  itemsStore = new ItemsStore()
   aboutStore = new AboutStore()
 
   navItems : Array<NavItem> = [
     this.homeStore,
+    this.submitStore,
+    this.itemsStore,
     this.aboutStore
   ]
 
   constructor() {
     makeObservable(this, {
       homeStore: observable,
+      submitStore: observable,
+      itemsStore: observable,
       aboutStore: observable,
       navItems: observable,
       allPages: computed

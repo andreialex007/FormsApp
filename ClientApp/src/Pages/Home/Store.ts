@@ -17,29 +17,8 @@ export default class Store extends NavItem{
   constructor() {
     super();
     makeObservable(this, {
-      message: observable,
-      count: observable,
-      formattedMessage: computed,
-      setMessage: action,
-      increment: action,
-      decrement: action
+      message: observable
     })
-  }
-
-  get formattedMessage(): string {
-    return capitalize(this.message)
-  }
-
-  setMessage(newMessage: string) {
-    this.message = newMessage
-  }
-
-  increment() {
-    this.count++
-  }
-
-  decrement() {
-    this.count--
   }
 
   override isActive(currentLocation: string): boolean {
