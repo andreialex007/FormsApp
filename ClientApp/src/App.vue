@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import Home from './Pages/Home/index.vue'
+import { HelloStore } from './Pages/Home/Store'
 </script>
 
 <template>
-  <HelloWorld />
+  <Home :store="new HelloStore()" />
 </template>

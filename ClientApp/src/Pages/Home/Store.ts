@@ -1,6 +1,10 @@
 import { makeAutoObservable } from 'mobx'
 import { capitalize } from 'lodash'
 
+export interface Props {
+  store: HelloStore
+}
+
 export class HelloStore {
   message = 'hello world'
   count = 0
@@ -26,4 +30,3 @@ export class HelloStore {
   }
 }
 
-export const helloStore = new HelloStore()

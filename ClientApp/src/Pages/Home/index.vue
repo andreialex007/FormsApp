@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Observer } from 'mobx-vue-lite'
-import { helloStore } from '../stores/HelloStore'
 import { NumberInput } from '@ark-ui/vue'
+import type { Props } from './Store'
+const props = defineProps<Props>()
 </script>
 
 <template>
@@ -9,22 +10,22 @@ import { NumberInput } from '@ark-ui/vue'
     <div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 p-8">
     <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full">
       <h1 class="text-4xl font-bold text-center mb-6 text-gray-800">
-        {{ helloStore.formattedMessage }}
+        {{ props.store.formattedMessage }}
       </h1>
 
       <div class="mb-6">
         <p class="text-center text-2xl font-semibold text-gray-700 mb-4">
-          Counter: {{ helloStore.count }}
+          Counter: {{ props.store.count }}
         </p>
         <div class="flex gap-4 justify-center">
           <button
-            @click="helloStore.decrement()"
+            @click="props.store.decrement()"
             class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200"
           >
             Decrement
           </button>
           <button
-            @click="helloStore.increment()"
+            @click="props.store.increment()"
             class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200"
           >
             Increment
@@ -37,8 +38,8 @@ import { NumberInput } from '@ark-ui/vue'
         <NumberInput.Root
           :min="0"
           :max="100"
-          :defaultValue="helloStore.count.toString()"
-          @value-change="(details) => helloStore.count = parseInt(details.value) || 0"
+          :defaultValue="props.store.count.toString()"
+          @value-change="(details) => props.store.count = parseInt(details.value) || 0"
         >
           <NumberInput.Label class="block text-sm font-medium text-gray-700 mb-2">
             Set Count:
