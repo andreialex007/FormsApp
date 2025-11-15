@@ -11,6 +11,8 @@
   "dependencies": {
     "@ark-ui/vue": "^5.28.0",
     "axios": "^1.13.2",
+    "formstate": "^2.1.0",
+    "formstate-x": "^3.1.3",
     "lodash": "^4.17.21",
     "mobx": "^6.15.0",
     "mobx-vue-lite": "^0.4.3",

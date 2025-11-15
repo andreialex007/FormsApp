@@ -9,11 +9,20 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 export class AppStore {
+  
+  @observable
   homeStore = new HomeStore()
+
+  @observable
   submitStore = new SubmitStore()
+
+  @observable
   itemsStore = new ItemsStore()
+
+  @observable
   aboutStore = new AboutStore()
 
+  @observable
   navItems : Array<NavItem> = [
     this.homeStore,
     this.submitStore,
@@ -22,18 +31,7 @@ export class AppStore {
   ]
 
   constructor() {
-    makeObservable(this, {
-      homeStore: observable,
-      submitStore: observable,
-      itemsStore: observable,
-      aboutStore: observable,
-      navItems: observable,
-      allPages: computed
-    })
-  }
-
-  getActivePage(location: string) {
-    return this.navItems.find(x => x.isActive(location))
+    makeObservable(this)
   }
 
   get allPages() {

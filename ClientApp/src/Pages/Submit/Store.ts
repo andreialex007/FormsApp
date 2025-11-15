@@ -1,7 +1,9 @@
 import { makeObservable, observable, action, computed } from 'mobx'
 import NavItem from '../../Common/NavItem'
 import axios from '@/Common/AxiosConfig'
+import { FieldState, FormState } from "formstate";
 import { z } from 'zod'
+import _, { mapValues, transform } from 'lodash'
 
 
 export const countries = [
@@ -22,97 +24,82 @@ export interface Props {
   store: Store
 }
 
-const schema = z.object({
-  fullName: z.string().min(2, 'Full name must be at least 2 characters').max(100, 'Full name is too long'),
-  email: z.string().email('Please enter a valid email address'),
-  country: z.string().min(1, 'Please select a country'),
-  gender: z.string().min(1, 'Please select your gender'),
-  newsletter: z.boolean(),
-  birthDate: z.string().min(1, 'Please select your birth date')
-      .refine((date) => {
-        const selectedDate = new Date(date)
-        const today = new Date()
-        const age = today.getFullYear() - selectedDate.getFullYear()
-        return age >= 13 && age <= 120
-      }, 'You must be at least 13 years old'),
-})
-
 export default class Store extends NavItem {
   url = '/submit'
   name = 'Submit'
   icon = 'file-add-fill'
+  
+  @observable
+  fullName = new FieldState("")
+    .validators(
+      v => v.trim().length < 2 && "Full name must be at least 2 characters",
+      v => v.length > 100 && "Full name is too long"
+    ).enableAutoValidation()
 
-  fullName = ''
-  email = ''
-  country = ''
-  birthDate = ''
-  gender = ''
-  newsletter = false
+  email = new FieldState("")
+    .validators(
+      v => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && "Please enter a valid email address"
+    ).enableAutoValidation()
+
+  country = new FieldState("")
+    .validators(
+      v => v.length < 1 && "Please select a country"
+    ).enableAutoValidation()
+
+  gender = new FieldState("")
+    .validators(
+      v => v.length < 1 && "Please select your gender"
+    ).enableAutoValidation()
+
+  newsletter = new FieldState(false)
+
+  birthDate = new FieldState("")
+    .validators(
+      v => v.length < 1 && "Please select your birth date",
+      v => {
+        if (!v) return false
+        const selectedDate = new Date(v)
+        const today = new Date()
+        const age = today.getFullYear() - selectedDate.getFullYear()
+        return (age < 13 || age > 120) && "You must be at least 13 years old"
+      }
+    )
+
+  @observable
   isSubmitting = false
-
-  touched = {
-    fullName: false,
-    email: false,
-    country: false,
-    birthDate: false,
-    gender: false
-  }
 
   constructor() {
     super()
-    makeObservable(this, {
-      fullName: observable,
-      email: observable,
-      country: observable,
-      birthDate: observable,
-      gender: observable,
-      newsletter: observable,
-      isSubmitting: observable,
-      touched: observable,
-      errors: computed,
-      isValid: computed,
-      submitForm: action,
-      resetForm: action,
-      setTouched: action
-    })
+    makeObservable(this)
   }
 
+  @computed
   get errors(): Record<string, string> {
-    const result = schema.safeParse({
-      fullName: this.fullName,
-      email: this.email,
-      country: this.country,
-      birthDate: this.birthDate,
-      gender: this.gender,
-      newsletter: this.newsletter
-    })
-
-    if (result.success) {
-      return {}
-    }
-
-    const fieldErrors: Record<string, string> = {}
-    result.error.issues.forEach((issue) => {
-      const field = issue.path[0] as string
-      if (fieldErrors[field]) return
-      fieldErrors[field] = issue.message
-    })
-
-    return fieldErrors
+    return {};
   }
 
+  @computed
   get isValid() {
     return Object.keys(this.errors).length === 0
   }
 
-  setTouched(field: keyof typeof this.touched, value: boolean) {
-    this.touched[field] = value
+  @action
+  setTouched(field: string, value: boolean) {
+    
+  }
+  
+  onBlur = (field: FieldState<any>) => {
+    field.validate();
+    field.dirty = true
   }
 
+  @action
   async submitForm() {
-    Object.keys(this.touched).forEach((key) => {
+    
+    
+    /* Object.keys(this.touched).forEach((key) => {
       this.touched[key as keyof typeof this.touched] = true
-    })
+    }) */
 
     if (!this.isValid) {
       alert('Please fix validation errors before submitting')
@@ -122,12 +109,12 @@ export default class Store extends NavItem {
     this.isSubmitting = true
     try {
       const formData = {
-        fullName: this.fullName,
+       /* fullName: this.fullName,
         email: this.email,
         country: this.country,
         birthDate: this.birthDate,
         gender: this.gender,
-        newsletter: this.newsletter
+        newsletter: this.newsletter */
       }
 
       await axios.post('/api/submissions', {
@@ -143,21 +130,24 @@ export default class Store extends NavItem {
       this.isSubmitting = false
     }
   }
-
+  
+  
+  
+  @action
   resetForm() {
-    this.fullName = ''
+    /* this.fullName = ''
     this.email = ''
     this.country = ''
     this.birthDate = ''
     this.gender = ''
-    this.newsletter = false
+    this.newsletter = false */
 
-    this.touched = {
+    /* this.touched = {
       fullName: false,
       email: false,
       country: false,
       birthDate: false,
       gender: false
-    }
+    } */
   }
 }

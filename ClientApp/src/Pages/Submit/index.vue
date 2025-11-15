@@ -30,24 +30,23 @@ const props = defineProps<Props>()
               </label>
               <input
                 id="fullName"
-                v-model="props.store.fullName"
+                v-model="props.store.fullName.value"
                 type="text"
-                @blur="props.store.setTouched('fullName', true)"
+                @blur="props.store.onBlur(props.store.fullName)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.touched.fullName && props.store.errors.fullName
+                  props.store.fullName.dirty && props.store.fullName.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
                 placeholder="Enter your full name"
               />
               <div class="h-6 mt-1">
-                <transition name="error">
-                  <div v-if="props.store.touched.fullName && props.store.errors.fullName" class="flex items-center gap-1 text-red-600 text-sm">
-                    <i class="ri-error-warning-line"></i>
-                    <span>{{ props.store.errors.fullName }}</span>
-                  </div>
-                </transition>
+                <div v-if="props.store.fullName.dirty && props.store.fullName.error" 
+                     class="flex items-center gap-1 text-red-600 text-sm">
+                  <i class="ri-error-warning-line"></i>
+                  <span>{{ props.store.fullName.error }}</span>
+                </div>
               </div>
             </div>
 
@@ -59,24 +58,23 @@ const props = defineProps<Props>()
               </label>
               <input
                 id="email"
-                v-model="props.store.email"
+                v-model="props.store.email.value"
                 type="email"
-                @blur="props.store.setTouched('email', true)"
+                @blur="props.store.onBlur(props.store.email)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.touched.email && props.store.errors.email
+                  props.store.email.dirty && props.store.email.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
                 placeholder="your.email@example.com"
               />
               <div class="h-6 mt-1">
-                <transition name="error">
-                  <div v-if="props.store.touched.email && props.store.errors.email" class="flex items-center gap-1 text-red-600 text-sm">
-                    <i class="ri-error-warning-line"></i>
-                    <span>{{ props.store.errors.email }}</span>
-                  </div>
-                </transition>
+                <div v-if="props.store.email.dirty && props.store.email.error" 
+                     class="flex items-center gap-1 text-red-600 text-sm">
+                  <i class="ri-error-warning-line"></i>
+                  <span>{{ props.store.email.error }}</span>
+                </div>
               </div>
             </div>
 
@@ -89,10 +87,10 @@ const props = defineProps<Props>()
               <select
                 id="country"
                 v-model="props.store.country"
-                @blur="props.store.setTouched('country', true)"
+                @blur="props.store.onBlur(props.store.country)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none bg-white',
-                  props.store.touched.country && props.store.errors.country
+                  props.store.country.dirty && props.store.country.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
@@ -103,12 +101,11 @@ const props = defineProps<Props>()
                 </option>
               </select>
               <div class="h-6 mt-1">
-                <transition name="error">
-                  <div v-if="props.store.touched.country && props.store.errors.country" class="flex items-center gap-1 text-red-600 text-sm">
-                    <i class="ri-error-warning-line"></i>
-                    <span>{{ props.store.errors.country }}</span>
-                  </div>
-                </transition>
+                <div v-if="props.store.country.dirty && props.store.country.error" 
+                     class="flex items-center gap-1 text-red-600 text-sm">
+                  <i class="ri-error-warning-line"></i>
+                  <span>{{ props.store.country.error }}</span>
+                </div>
               </div>
             </div>
 
@@ -122,21 +119,20 @@ const props = defineProps<Props>()
                 id="birthDate"
                 v-model="props.store.birthDate"
                 type="date"
-                @blur="props.store.setTouched('birthDate', true)"
+                @blur="props.store.onBlur(props.store.birthDate)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.touched.birthDate && props.store.errors.birthDate
+                  props.store.birthDate.dirty && props.store.birthDate.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
               />
               <div class="h-6 mt-1">
-                <transition name="error">
-                  <div v-if="props.store.touched.birthDate && props.store.errors.birthDate" class="flex items-center gap-1 text-red-600 text-sm">
-                    <i class="ri-error-warning-line"></i>
-                    <span>{{ props.store.errors.birthDate }}</span>
-                  </div>
-                </transition>
+                <div v-if="props.store.birthDate.dirty && props.store.birthDate.error" 
+                     class="flex items-center gap-1 text-red-600 text-sm">
+                  <i class="ri-error-warning-line"></i>
+                  <span>{{ props.store.birthDate.error }}</span>
+                </div>
               </div>
             </div>
 
@@ -152,7 +148,7 @@ const props = defineProps<Props>()
                     v-model="props.store.gender"
                     type="radio"
                     value="Male"
-                    @blur="props.store.setTouched('gender', true)"
+                    @blur="props.store.gender.dirty = true"
                     class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
                   />
                   <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Male</span>
@@ -162,7 +158,7 @@ const props = defineProps<Props>()
                     v-model="props.store.gender"
                     type="radio"
                     value="Female"
-                    @blur="props.store.setTouched('gender', true)"
+                    @blur="props.store.gender.dirty = true"
                     class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
                   />
                   <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Female</span>
@@ -172,19 +168,18 @@ const props = defineProps<Props>()
                     v-model="props.store.gender"
                     type="radio"
                     value="Other"
-                    @blur="props.store.setTouched('gender', true)"
+                    @blur="props.store.gender.dirty = true"
                     class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
                   />
                   <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Other</span>
                 </label>
               </div>
               <div class="h-6 mt-1">
-                <transition name="error">
-                  <div v-if="props.store.touched.gender && props.store.errors.gender" class="flex items-center gap-1 text-red-600 text-sm">
-                    <i class="ri-error-warning-line"></i>
-                    <span>{{ props.store.errors.gender }}</span>
-                  </div>
-                </transition>
+                <div v-if="props.store.gender.dirty && props.store.gender.error" 
+                     class="flex items-center gap-1 text-red-600 text-sm">
+                  <i class="ri-error-warning-line"></i>
+                  <span>{{ props.store.gender.error }}</span>
+                </div>
               </div>
             </div>
 
