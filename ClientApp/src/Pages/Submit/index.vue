@@ -1,18 +1,228 @@
 <script setup lang="ts">
 import { Observer } from 'mobx-vue-lite'
 import type { Props } from './Store'
+import { countries } from './Store'
 
 const props = defineProps<Props>()
 </script>
 
 <template>
   <Observer>
-    <div class="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] p-8">
-      <div class="flex flex-col items-center">
-        <i :class="`ri-${props.store.icon} text-9xl text-green-600 mb-4`"></i>
-        <h1 class="text-5xl font-bold text-gray-800">
-          {{ props.store.name }}
-        </h1>
+    <div class="min-h-[calc(100vh-4rem)]  py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-600 rounded-full mb-4">
+            <i class="ri-file-add-fill text-3xl text-white"></i>
+          </div>
+          <h1 class="text-4xl font-bold text-gray-900 mb-2">Submit Your Information</h1>
+          <p class="text-gray-600">Please fill out all the fields below</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 ">
+          <form @submit.prevent="props.store.submitForm()" class="space-y-6">
+            <!-- Full Name (Text) -->
+            <div>
+              <label for="fullName" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                <i class="ri-user-line mr-2 text-gray-600"></i>
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                v-model="props.store.fullName"
+                type="text"
+                @blur="props.store.setTouched('fullName', true)"
+                :class="[
+                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
+                  props.store.touched.fullName && props.store.errors.fullName
+                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
+                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
+                ]"
+                placeholder="Enter your full name"
+              />
+              <div class="h-6 mt-1">
+                <transition name="error">
+                  <div v-if="props.store.touched.fullName && props.store.errors.fullName" class="flex items-center gap-1 text-red-600 text-sm">
+                    <i class="ri-error-warning-line"></i>
+                    <span>{{ props.store.errors.fullName }}</span>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Email (Text) -->
+            <div>
+              <label for="email" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                <i class="ri-mail-line mr-2 text-gray-600"></i>
+                Email Address
+              </label>
+              <input
+                id="email"
+                v-model="props.store.email"
+                type="email"
+                @blur="props.store.setTouched('email', true)"
+                :class="[
+                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
+                  props.store.touched.email && props.store.errors.email
+                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
+                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
+                ]"
+                placeholder="your.email@example.com"
+              />
+              <div class="h-6 mt-1">
+                <transition name="error">
+                  <div v-if="props.store.touched.email && props.store.errors.email" class="flex items-center gap-1 text-red-600 text-sm">
+                    <i class="ri-error-warning-line"></i>
+                    <span>{{ props.store.errors.email }}</span>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Country (Dropdown) -->
+            <div>
+              <label for="country" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                <i class="ri-global-line mr-2 text-gray-600"></i>
+                Country
+              </label>
+              <select
+                id="country"
+                v-model="props.store.country"
+                @blur="props.store.setTouched('country', true)"
+                :class="[
+                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none bg-white',
+                  props.store.touched.country && props.store.errors.country
+                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
+                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
+                ]"
+              >
+                <option value="">Select your country</option>
+                <option v-for="c in countries" :key="c" :value="c">
+                  {{ c }}
+                </option>
+              </select>
+              <div class="h-6 mt-1">
+                <transition name="error">
+                  <div v-if="props.store.touched.country && props.store.errors.country" class="flex items-center gap-1 text-red-600 text-sm">
+                    <i class="ri-error-warning-line"></i>
+                    <span>{{ props.store.errors.country }}</span>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Birth Date (Date) -->
+            <div>
+              <label for="birthDate" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                <i class="ri-calendar-line mr-2 text-gray-600"></i>
+                Birth Date
+              </label>
+              <input
+                id="birthDate"
+                v-model="props.store.birthDate"
+                type="date"
+                @blur="props.store.setTouched('birthDate', true)"
+                :class="[
+                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
+                  props.store.touched.birthDate && props.store.errors.birthDate
+                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
+                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
+                ]"
+              />
+              <div class="h-6 mt-1">
+                <transition name="error">
+                  <div v-if="props.store.touched.birthDate && props.store.errors.birthDate" class="flex items-center gap-1 text-red-600 text-sm">
+                    <i class="ri-error-warning-line"></i>
+                    <span>{{ props.store.errors.birthDate }}</span>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Gender (Radio) -->
+            <div>
+              <label class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                <i class="ri-user-heart-line mr-2 text-gray-600"></i>
+                Gender
+              </label>
+              <div class="flex gap-6">
+                <label class="flex items-center cursor-pointer group">
+                  <input
+                    v-model="props.store.gender"
+                    type="radio"
+                    value="Male"
+                    @blur="props.store.setTouched('gender', true)"
+                    class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
+                  />
+                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Male</span>
+                </label>
+                <label class="flex items-center cursor-pointer group">
+                  <input
+                    v-model="props.store.gender"
+                    type="radio"
+                    value="Female"
+                    @blur="props.store.setTouched('gender', true)"
+                    class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
+                  />
+                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Female</span>
+                </label>
+                <label class="flex items-center cursor-pointer group">
+                  <input
+                    v-model="props.store.gender"
+                    type="radio"
+                    value="Other"
+                    @blur="props.store.setTouched('gender', true)"
+                    class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
+                  />
+                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Other</span>
+                </label>
+              </div>
+              <div class="h-6 mt-1">
+                <transition name="error">
+                  <div v-if="props.store.touched.gender && props.store.errors.gender" class="flex items-center gap-1 text-red-600 text-sm">
+                    <i class="ri-error-warning-line"></i>
+                    <span>{{ props.store.errors.gender }}</span>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Newsletter (Checkbox) -->
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <label class="flex items-center cursor-pointer group">
+                <input
+                  v-model="props.store.newsletter"
+                  type="checkbox"
+                  class="w-5 h-5 text-gray-600 border-gray-300 rounded focus:ring-gray-500 cursor-pointer"
+                />
+                <span class="ml-3 text-gray-700 group-hover:text-gray-600 transition">
+                  <i class="ri-mail-send-line mr-1 text-gray-600"></i>
+                  Subscribe to our newsletter
+                </span>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+              <button
+                type="submit"
+                :disabled="props.store.isSubmitting"
+                class="w-full bg-emerald-600 text-white py-4 px-8 rounded-lg text-lg font-bold hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl"
+              >
+                <i v-if="!props.store.isSubmitting" class="ri-send-plane-fill mr-2 text-xl"></i>
+                <i v-else class="ri-loader-4-line mr-2 animate-spin text-xl"></i>
+                {{ props.store.isSubmitting ? 'Submitting...' : 'Submit Form' }}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Info Footer -->
+        <div class="text-center mt-6 text-sm text-gray-600">
+          <i class="ri-shield-check-line mr-1"></i>
+          Your information is secure and will never be shared
+        </div>
       </div>
     </div>
   </Observer>

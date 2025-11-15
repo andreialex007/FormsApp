@@ -9,7 +9,7 @@ const router = useRouter()
 <template>
   <div class="flex min-h-screen flex-col">
     <!-- Navigation -->
-    <div class="flex flex-row bg-gray-100 shadow-md">
+    <div class="flex flex-row bg-gray-100 shadow-md z-10">
       <div
         v-for="item in appStore.navItems"
         :key="item.url"
