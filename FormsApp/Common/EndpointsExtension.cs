@@ -12,10 +12,17 @@ public static class EndpointsExtension
 
         var endpointTypes = assembly.GetExportedTypes()
             .Where(t => t.IsAbstract == false &&
-                        t.GetInterfaces().Contains(endPointType));
+                        t.GetInterfaces().Contains(endPointType))
+            .ToList();
+
+        Console.WriteLine($"Found {endpointTypes.Count} endpoint types");
 
         foreach (var type in endpointTypes)
-            if (Activator.CreateInstance(type) is IEndpoint instance) instance.Map(app);
+        {
+            Console.WriteLine($"Mapping endpoint: {type.Name}");
+            if (Activator.CreateInstance(type) is IEndpoint instance)
+                instance.Map(app);
+        }
 
         return app;
     }

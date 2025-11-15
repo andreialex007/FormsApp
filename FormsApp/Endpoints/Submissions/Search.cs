@@ -10,12 +10,13 @@ public class Search : IEndpoint
     {
         app.MapPost("/api/submissions/search", async (
             SubmissionSearchDto request,
-            SubmissionService submissionService,
+            ISubmissionService submissionService,
             CancellationToken ct) =>
         {
             var result = await submissionService.SearchAsync(request, ct);
             return Results.Ok(result);
         })
-        .WithName("SearchSubmissions");
+        .WithName("SearchSubmissions")
+        .WithTags("Submissions");
     }
 }
