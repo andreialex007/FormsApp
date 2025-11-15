@@ -3,16 +3,18 @@ using FluentValidation;
 using FormsApp.Common;
 using FormsApp.Core.Data;
 using FormsApp.Core.Data.Entities;
-using FormsApp.Core.Services.Submission.Dto;
+using FormsApp.Core.Services.Submissions;
+using FormsApp.Core.Services.Submissions.Dto;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("FormsAppDb"));
 builder.Services.AddValidatorsFromAssemblyContaining<SubmissionSearchDto>();
-builder.Services.AddScoped<FormsApp.Core.Services.Submission.SubmissionService>();
+builder.Services.AddScoped<SubmissionService>();
 
 var app = builder.Build();
 
@@ -83,21 +85,12 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 app.MapAllEndpoints();
-
-var endpointTypes = Assembly.GetExecutingAssembly()
-    .GetTypes()
-    .Where(t => typeof(IEndpoint).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
-
-foreach (var endpointType in endpointTypes)
-{
-    var endpoint = (IEndpoint)Activator.CreateInstance(endpointType)!;
-    endpoint.Map(app);
-}
 
 
 app.Run();

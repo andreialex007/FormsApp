@@ -1,6 +1,6 @@
 using FormsApp.Common;
-using FormsApp.Core.Services.Submission;
-using FormsApp.Core.Services.Submission.Dto;
+using FormsApp.Core.Services.Submissions;
+using FormsApp.Core.Services.Submissions.Dto;
 
 namespace FormsApp.Endpoints.Submissions;
 
@@ -16,7 +16,6 @@ public class Search : IEndpoint
             var result = await submissionService.SearchAsync(request, ct);
             return Results.Ok(result);
         })
-        .WithName("SearchSubmissions")
-        .WithOpenApi();
+        .WithName("SearchSubmissions");
     }
 }
