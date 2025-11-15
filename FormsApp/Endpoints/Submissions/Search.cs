@@ -1,5 +1,4 @@
 using FormsApp.Common;
-using FormsApp.Core.Models;
 using FormsApp.Core.Services.Submission;
 using FormsApp.Core.Services.Submission.Dto;
 
@@ -10,7 +9,7 @@ public class Search : IEndpoint
     public void Map(WebApplication app)
     {
         app.MapPost("/api/submissions/search", async (
-            SubmissionSearchRequest request,
+            SubmissionSearchDto request,
             SubmissionService submissionService,
             CancellationToken ct) =>
         {

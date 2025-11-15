@@ -1,19 +1,62 @@
 using System.Reflection;
+using FluentValidation;
 using FormsApp.Common;
 using FormsApp.Core.Data;
+using FormsApp.Core.Data.Entities;
+using FormsApp.Core.Services.Submission.Dto;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseInMemoryDatabase("FormsAppDb"));
-
-// Register services
+builder.Services.AddProblemDetails();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("FormsAppDb"));
+builder.Services.AddValidatorsFromAssemblyContaining<SubmissionSearchDto>();
 builder.Services.AddScoped<FormsApp.Core.Services.Submission.SubmissionService>();
 
 var app = builder.Build();
+
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exceptionHandlerFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var exception = exceptionHandlerFeature?.Error;
+
+        if (exception is FluentValidation.ValidationException validationException)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.ContentType = "application/problem+json";
+
+            var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Validation Error",
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Detail = "One or more validation errors occurred."
+            };
+
+            problemDetails.Extensions["errors"] = validationException.Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        }
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                error = "An error occurred processing your request."
+            });
+        }
+    });
+});
+
+app.UseStatusCodePages();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -23,12 +66,12 @@ using (var scope = app.Services.CreateScope())
     if (!context.Submissions.Any())
     {
         context.Submissions.AddRange(
-            new FormsApp.Core.Entities.Submission
+            new Submission
             {
                 Content = "Sample submission 1",
                 Created = DateTime.UtcNow.AddDays(-2)
             },
-            new FormsApp.Core.Entities.Submission
+            new Submission
             {
                 Content = "Sample submission 2",
                 Created = DateTime.UtcNow.AddDays(-1)
@@ -44,8 +87,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapAllEndpoints();
 
-// Discover and map all endpoints
 var endpointTypes = Assembly.GetExecutingAssembly()
     .GetTypes()
     .Where(t => typeof(IEndpoint).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
@@ -56,28 +99,5 @@ foreach (var endpointType in endpointTypes)
     endpoint.Map(app);
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int) (TemperatureC / 0.5556);
-}
