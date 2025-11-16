@@ -2,8 +2,11 @@
 import { Observer } from 'mobx-vue-lite'
 import type { Props } from './Store'
 import { countries } from './Store'
+import ValidationError from './ValidationError.vue'
 
 const props = defineProps<Props>()
+
+const genderOptions = ['Male', 'Female', 'Other']
 </script>
 
 <template>
@@ -21,7 +24,7 @@ const props = defineProps<Props>()
 
         <!-- Form Card -->
         <div class="bg-white rounded-2xl shadow-xl p-8 ">
-          <form @submit.prevent="props.store.submitForm()" class="space-y-6">
+          <form @submit.prevent="props.store.submitForm()" class="space-y-3">
             <!-- Full Name (Text) -->
             <div>
               <label for="fullName" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
@@ -30,24 +33,18 @@ const props = defineProps<Props>()
               </label>
               <input
                 id="fullName"
-                v-model="props.store.fullName.value"
+                v-model="props.store.fields.fullName.value"
                 type="text"
-                @blur="props.store.onBlur(props.store.fullName)"
+                @blur="props.store.triggerValidate(props.store.fields.fullName)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.fullName.dirty && props.store.fullName.error
+                  props.store.fields.fullName.dirty && props.store.fields.fullName.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
                 placeholder="Enter your full name"
               />
-              <div class="h-6 mt-1">
-                <div v-if="props.store.fullName.dirty && props.store.fullName.error" 
-                     class="flex items-center gap-1 text-red-600 text-sm">
-                  <i class="ri-error-warning-line"></i>
-                  <span>{{ props.store.fullName.error }}</span>
-                </div>
-              </div>
+              <ValidationError :field="props.store.fields.fullName" />
             </div>
 
             <!-- Email (Text) -->
@@ -58,24 +55,18 @@ const props = defineProps<Props>()
               </label>
               <input
                 id="email"
-                v-model="props.store.email.value"
+                v-model="props.store.fields.email.value"
                 type="email"
-                @blur="props.store.onBlur(props.store.email)"
+                @blur="props.store.triggerValidate(props.store.fields.email)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.email.dirty && props.store.email.error
+                  props.store.fields.email.dirty && props.store.fields.email.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
                 placeholder="your.email@example.com"
               />
-              <div class="h-6 mt-1">
-                <div v-if="props.store.email.dirty && props.store.email.error" 
-                     class="flex items-center gap-1 text-red-600 text-sm">
-                  <i class="ri-error-warning-line"></i>
-                  <span>{{ props.store.email.error }}</span>
-                </div>
-              </div>
+              <ValidationError :field="props.store.fields.email" />
             </div>
 
             <!-- Country (Dropdown) -->
@@ -86,11 +77,11 @@ const props = defineProps<Props>()
               </label>
               <select
                 id="country"
-                v-model="props.store.country"
-                @blur="props.store.onBlur(props.store.country)"
+                v-model="props.store.fields.country.value"
+                @blur="props.store.triggerValidate(props.store.fields.country)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none bg-white',
-                  props.store.country.dirty && props.store.country.error
+                  props.store.fields.country.dirty && props.store.fields.country.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
@@ -100,13 +91,7 @@ const props = defineProps<Props>()
                   {{ c }}
                 </option>
               </select>
-              <div class="h-6 mt-1">
-                <div v-if="props.store.country.dirty && props.store.country.error" 
-                     class="flex items-center gap-1 text-red-600 text-sm">
-                  <i class="ri-error-warning-line"></i>
-                  <span>{{ props.store.country.error }}</span>
-                </div>
-              </div>
+              <ValidationError :field="props.store.fields.country" />
             </div>
 
             <!-- Birth Date (Date) -->
@@ -117,23 +102,17 @@ const props = defineProps<Props>()
               </label>
               <input
                 id="birthDate"
-                v-model="props.store.birthDate"
+                v-model="props.store.fields.birthDate.value"
                 type="date"
-                @blur="props.store.onBlur(props.store.birthDate)"
+                @blur="props.store.triggerValidate(props.store.fields.birthDate)"
                 :class="[
                   'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.birthDate.dirty && props.store.birthDate.error
+                  props.store.fields.birthDate.dirty && props.store.fields.birthDate.error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
                     : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
                 ]"
               />
-              <div class="h-6 mt-1">
-                <div v-if="props.store.birthDate.dirty && props.store.birthDate.error" 
-                     class="flex items-center gap-1 text-red-600 text-sm">
-                  <i class="ri-error-warning-line"></i>
-                  <span>{{ props.store.birthDate.error }}</span>
-                </div>
-              </div>
+              <ValidationError :field="props.store.fields.birthDate" />
             </div>
 
             <!-- Gender (Radio) -->
@@ -143,51 +122,25 @@ const props = defineProps<Props>()
                 Gender
               </label>
               <div class="flex gap-6">
-                <label class="flex items-center cursor-pointer group">
+                <label v-for="option in genderOptions" :key="option" class="flex items-center cursor-pointer group">
                   <input
-                    v-model="props.store.gender"
+                    v-model="props.store.fields.gender.value"
                     type="radio"
-                    value="Male"
-                    @blur="props.store.gender.dirty = true"
+                    :value="option"
+                    @blur="props.store.fields.gender.dirty = true"
                     class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
                   />
-                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Male</span>
-                </label>
-                <label class="flex items-center cursor-pointer group">
-                  <input
-                    v-model="props.store.gender"
-                    type="radio"
-                    value="Female"
-                    @blur="props.store.gender.dirty = true"
-                    class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
-                  />
-                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Female</span>
-                </label>
-                <label class="flex items-center cursor-pointer group">
-                  <input
-                    v-model="props.store.gender"
-                    type="radio"
-                    value="Other"
-                    @blur="props.store.gender.dirty = true"
-                    class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
-                  />
-                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">Other</span>
+                  <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">{{ option }}</span>
                 </label>
               </div>
-              <div class="h-6 mt-1">
-                <div v-if="props.store.gender.dirty && props.store.gender.error" 
-                     class="flex items-center gap-1 text-red-600 text-sm">
-                  <i class="ri-error-warning-line"></i>
-                  <span>{{ props.store.gender.error }}</span>
-                </div>
-              </div>
+              <ValidationError :field="props.store.fields.gender" />
             </div>
 
             <!-- Newsletter (Checkbox) -->
             <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <label class="flex items-center cursor-pointer group">
                 <input
-                  v-model="props.store.newsletter"
+                  v-model="props.store.fields.newsletter.value"
                   type="checkbox"
                   class="w-5 h-5 text-gray-600 border-gray-300 rounded focus:ring-gray-500 cursor-pointer"
                 />
