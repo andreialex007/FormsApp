@@ -7,7 +7,9 @@
       "Bash(npx tailwindcss:*)",
       "Bash(node node_modules/tailwindcss/lib/cli.js:*)",
       "Bash(dotnet add package FluentValidation.DependencyInjectionExtensions)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
