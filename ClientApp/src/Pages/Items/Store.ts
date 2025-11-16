@@ -49,10 +49,12 @@ export default class Store extends NavItem {
   total = 0
 
   @observable
-  filterId: string = ''
-
-  @observable
-  filterContentSearchTerm: string = ''
+  filters = {
+    id: '',
+    dateFrom: '',
+    dateTo: '',
+    contentSearchTerm: ''
+  }
 
   constructor() {
     super()
@@ -88,8 +90,10 @@ export default class Store extends NavItem {
       const response = await axios.post('/api/submissions/search', {
         skip: this.skip,
         take: this.take,
-        id: this.filterId ? parseInt(this.filterId) : null,
-        contentSearchTerm: this.filterContentSearchTerm || null
+        id: this.filters.id ? parseInt(this.filters.id) : null,
+        contentSearchTerm: this.filters.contentSearchTerm || null,
+        dateFrom: this.filters.dateFrom || null,
+        dateTo: this.filters.dateTo || null
       })
 
       const rawSubmissions = response.data.items || []
@@ -114,6 +118,11 @@ export default class Store extends NavItem {
     this.skip = 0
     this.submissions = []
     this.loadSubmissions(false)
+  }
+
+  @action
+  onFilterChange() {
+    this.applyFilters()
   }
 
   @action

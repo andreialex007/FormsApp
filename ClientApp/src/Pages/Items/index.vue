@@ -49,6 +49,8 @@ onMounted(() => props.store.loadSubmissions())
                 <tr class="bg-gray-100 border-b border-gray-200">
                   <th class="px-6 py-3" style="width: 120px;">
                     <input
+                      v-model="props.store.filters.id"
+                      @input="props.store.onFilterChange()"
                       type="text"
                       placeholder="ID"
                       class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none"
@@ -57,11 +59,15 @@ onMounted(() => props.store.loadSubmissions())
                   <th class="px-6 py-3" style="width: 320px;">
                     <div class="flex gap-2">
                       <input
+                        v-model="props.store.filters.dateFrom"
+                        @input="props.store.onFilterChange()"
                         type="date"
                         placeholder="From"
                         class="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none"
                       />
                       <input
+                        v-model="props.store.filters.dateTo"
+                        @input="props.store.onFilterChange()"
                         type="date"
                         placeholder="To"
                         class="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none"
@@ -70,6 +76,8 @@ onMounted(() => props.store.loadSubmissions())
                   </th>
                   <th class="px-6 py-3">
                     <input
+                      v-model="props.store.filters.contentSearchTerm"
+                      @input="props.store.onFilterChange()"
                       type="text"
                       placeholder="Search content..."
                       class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none"
