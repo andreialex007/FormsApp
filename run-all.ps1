@@ -58,13 +58,42 @@ Write-Host "Frontend PID: $($frontend.Id)" -ForegroundColor Green
 Write-Host "Close either process window or press Ctrl+C here to stop everything." -ForegroundColor Yellow
 
 try {
-    Wait-Process -Id @($backend.Id, $frontend.Id)
+    $waitIds = @()
+    foreach ($proc in @($backend, $frontend)) {
+        if ($proc) {
+            # Refresh process state and check if it still exists
+            try {
+                $liveProcess = Get-Process -Id $proc.Id -ErrorAction Stop
+                if (-not $liveProcess.HasExited) {
+                    $waitIds += $proc.Id
+                }
+            }
+            catch {
+                Write-Warning "Process $($proc.Id) has already exited."
+            }
+        }
+    }
+
+    if ($waitIds.Count -gt 0) {
+        Wait-Process -Id $waitIds -ErrorAction SilentlyContinue
+    }
+    else {
+        Write-Warning "All processes have exited. Check for errors above."
+    }
 }
 finally {
     foreach ($proc in @($backend, $frontend)) {
-        if ($proc -and -not $proc.HasExited) {
-            Write-Host "Stopping PID $($proc.Id)..." -ForegroundColor DarkYellow
-            Stop-Process -Id $proc.Id -Force
+        if ($proc) {
+            try {
+                $liveProcess = Get-Process -Id $proc.Id -ErrorAction Stop
+                if (-not $liveProcess.HasExited) {
+                    Write-Host "Stopping PID $($proc.Id)..." -ForegroundColor DarkYellow
+                    Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+                }
+            }
+            catch {
+                # Process already exited, ignore
+            }
         }
     }
 }
