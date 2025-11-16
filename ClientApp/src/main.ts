@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import './style.css'
+import 'sweetalert2/dist/sweetalert2.min.css'
+import 'toastr/build/toastr.min.css'
 import App from './App.vue'
 import Observer from 'mobx-vue-lite'
 import { router, appStore } from './AppStore'

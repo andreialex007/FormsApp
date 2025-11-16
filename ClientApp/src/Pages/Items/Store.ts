@@ -2,6 +2,8 @@ import { makeObservable, observable, action, computed } from 'mobx'
 import NavItem from '@/Common/NavItem'
 import axios from '@/Common/AxiosConfig'
 import _ from 'lodash'
+import Swal from 'sweetalert2'
+import toastr from 'toastr'
 
 export interface FormContent {
   fullName: string
@@ -12,11 +14,24 @@ export interface FormContent {
   newsletter: boolean
 }
 
+export interface SubmissionDto {
+  id: number
+  created: string
+  content: string
+}
+
 export interface Submission {
   id: number
   created: string
   content: string
   parsedContent: FormContent
+}
+
+export interface SearchResponse<T> {
+  items: T[]
+  returned: number
+  found: number
+  total: number
 }
 
 export interface Props {
@@ -90,7 +105,7 @@ export default class Store extends NavItem {
     this.skip = append ? (this.skip + this.take) : 0
 
     try {
-      const response = await axios.post('/api/submissions/search', {
+      const response = await axios.post<SearchResponse<SubmissionDto>>('/api/submissions/search', {
         skip: this.skip,
         take: this.take,
         id: this.filters.id ? parseInt(this.filters.id) : null,
@@ -100,7 +115,7 @@ export default class Store extends NavItem {
       })
 
       const rawSubmissions = response.data.items || []
-      const parsedSubmissions = rawSubmissions.map((sub: any) => ({
+      const parsedSubmissions: Submission[] = rawSubmissions.map((sub) => ({
         ...sub,
         parsedContent: this.parseContent(sub.content)
       }))
@@ -135,10 +150,21 @@ export default class Store extends NavItem {
   }
 
   @action
-  confirmDelete(id: number) {
-    if (window.confirm('Are you sure you want to delete this submission?')) {
-      this.deleteSubmission(id)
-    }
+  async confirmDelete(id: number) {
+    const result = await Swal.fire({
+      title: '<i class="ri-delete-bin-line"></i> Delete Submission',
+      html: `Are you sure you want to delete submission <b>#${id}</b>?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '<i class="ri-check-line"></i> Delete',
+      cancelButtonText: '<i class="ri-close-line"></i> Cancel',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+    })
+
+    if (!result.isConfirmed) return
+
+    await this.deleteSubmission(id)
   }
 
   @action
@@ -146,8 +172,12 @@ export default class Store extends NavItem {
     try {
       await axios.delete(`/api/submissions/${id}`)
       this.submissions = this.submissions.filter(s => s.id !== id)
+      this.found = this.found - 1
+      this.total = this.total - 1
+      toastr.success('Submission deleted successfully')
     } catch (error) {
       console.error('Error deleting submission:', error)
+      toastr.error('Failed to delete submission')
     }
   }
 }
