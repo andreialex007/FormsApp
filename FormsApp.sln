@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsApp", "FormsApp\FormsApp.csproj", "{AEFB29F3-D465-4373-81B7-D56FB7E4A7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsApp.Tests", "FormsApp.Tests\FormsApp.Tests.csproj", "{0CB6601E-9AA8-4783-A1E7-91179BDC53FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{67E098AD-78B0-48DC-892F-954409DFE153}"
+	ProjectSection(SolutionItems) = preProject
+		run-all.ps1 = run-all.ps1
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsApp.Core", "FormsApp.Core\FormsApp.Core.csproj", "{14E7BD28-1538-4978-8005-AA5436695187}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEFB29F3-D465-4373-81B7-D56FB7E4A7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFB29F3-D465-4373-81B7-D56FB7E4A7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFB29F3-D465-4373-81B7-D56FB7E4A7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFB29F3-D465-4373-81B7-D56FB7E4A7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB6601E-9AA8-4783-A1E7-91179BDC53FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB6601E-9AA8-4783-A1E7-91179BDC53FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB6601E-9AA8-4783-A1E7-91179BDC53FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB6601E-9AA8-4783-A1E7-91179BDC53FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E7BD28-1538-4978-8005-AA5436695187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E7BD28-1538-4978-8005-AA5436695187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E7BD28-1538-4978-8005-AA5436695187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E7BD28-1538-4978-8005-AA5436695187}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal

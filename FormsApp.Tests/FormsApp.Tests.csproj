@@ -24,6 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\FormsApp.Core\FormsApp.Core\FormsApp.Core.csproj" />
+        <ProjectReference Include="..\FormsApp.Core\FormsApp.Core.csproj" />
     </ItemGroup>
 
 </Project>

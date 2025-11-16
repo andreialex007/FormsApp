@@ -1,0 +1,18 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AIValidator_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FUsers_003Fuser_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Fdb6edd8bce6af26cfa378ba0cc1c5ec76bbd4a05f242b76bd21db74a91384_003FIValidator_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ASwaggerGenOptionsExtensions_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FUsers_003Fuser_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Fbdc1fda7e91ddc1bef428343b1b0449a72fec943c2c786c589fe52df47d87178_003FSwaggerGenOptionsExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=93007a51_002D4123_002D4990_002Dab21_002D5687382a44b2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SubmissionServiceTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::0CB6601E-9AA8-4783-A1E7-91179BDC53FA::net10.0::FormsApp.Tests.Services.Submissions.SubmissionServiceTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9c5356f9_002D0da9_002D4259_002D83f0_002D04b2e2a62340/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SubmissionServiceTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::0CB6601E-9AA8-4783-A1E7-91179BDC53FA::net10.0::FormsApp.Tests.Services.Submissions.SubmissionServiceTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fdc8edfc_002D351c_002D4c3e_002Da6f6_002Da1ef9af3725e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SubmissionServiceTests #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::0CB6601E-9AA8-4783-A1E7-91179BDC53FA::net10.0::FormsApp.Tests.Services.Submissions.SubmissionServiceTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
