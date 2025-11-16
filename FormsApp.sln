@@ -4,10 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsApp", "FormsApp\FormsA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsApp.Tests", "FormsApp.Tests\FormsApp.Tests.csproj", "{0CB6601E-9AA8-4783-A1E7-91179BDC53FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{67E098AD-78B0-48DC-892F-954409DFE153}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{67E098AD-78B0-48DC-892F-954409DFE153}"
 	ProjectSection(SolutionItems) = preProject
 		run-all.ps1 = run-all.ps1
 		README.md = README.md
+		LARGE_ATTACHMENTS_ARCHITECTURE.md = LARGE_ATTACHMENTS_ARCHITECTURE.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsApp.Core", "FormsApp.Core\FormsApp.Core.csproj", "{14E7BD28-1538-4978-8005-AA5436695187}"

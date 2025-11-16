@@ -7,6 +7,9 @@ FormsApp is a sample form submission dashboard that combines an ASP.NET Core min
 - Vue 3, Vite, TailwindCSS, and MobX for the client
 - PowerShell orchestration script to start both layers together
 
+## Documentation
+- **[Large Attachments Architecture](LARGE_ATTACHMENTS_ARCHITECTURE.md)** - Comprehensive architecture design for handling large file attachments (~100MB) using AWS S3 pre-signed URLs, event-driven processing with SQS/Lambda, and scalability optimizations.
+
 ## Prerequisites
 - .NET 8 SDK
 - Node.js 20+ and npm
