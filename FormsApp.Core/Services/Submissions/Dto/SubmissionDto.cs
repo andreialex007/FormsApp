@@ -5,7 +5,7 @@ namespace FormsApp.Core.Services.Submissions.Dto;
 
 public class SubmissionDto : DtoBase
 {
-    public DateTime Created { get; set; } = DateTime.Now;
+    public DateTime Created { get; set; } = DateTime.UtcNow;
     public string Content { get; set; }
 }
 

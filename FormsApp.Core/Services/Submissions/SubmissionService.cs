@@ -22,7 +22,9 @@ public class SubmissionService(
         var total = await db.Submissions.CountAsync(ct);
 
         if (dto.Id.HasValue) query = query.Where(s => s.Id == dto.Id.Value);
-        if (!string.IsNullOrWhiteSpace(dto.ContentSearchTerm)) query = query.Where(s => s.Content.ToLower().Contains(dto.ContentSearchTerm.ToLower()));
+        // Case-insensitive search using EF.Functions.Like for better performance (allows index usage)
+        if (!string.IsNullOrWhiteSpace(dto.ContentSearchTerm))
+            query = query.Where(s => EF.Functions.Like(s.Content, $"%{dto.ContentSearchTerm}%"));
         if (dto.DateFrom.HasValue) query = query.Where(s => s.Created >= dto.DateFrom.Value);
         if (dto.DateTo.HasValue) query = query.Where(s => s.Created <= dto.DateTo.Value);
 

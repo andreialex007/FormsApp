@@ -24,6 +24,22 @@ builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("FormsAppDb"));
 builder.Services.AddValidatorsFromAssemblyContaining<SubmissionSearchDto>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+// TODO: CORS Policy Allows Any Origin - SECURITY ISSUE
+// WARNING: Before deploying to production, this CORS policy MUST be updated!
+// Current configuration allows ANY origin to access this API, which is a security vulnerability.
+//
+// For production, replace AllowAnyOrigin() with specific allowed origins:
+// Example:
+//   policy.WithOrigins("https://yourdomain.com", "https://www.yourdomain.com")
+//         .AllowCredentials()  // Use this if you need to send cookies/auth headers
+//         .AllowAnyMethod()
+//         .AllowAnyHeader();
+//
+// Or use configuration-based approach:
+//   var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+//   policy.WithOrigins(allowedOrigins)
+//         .AllowAnyMethod()
+//         .AllowAnyHeader();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

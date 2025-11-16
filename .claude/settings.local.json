@@ -9,7 +9,9 @@
       "Bash(dotnet add package FluentValidation.DependencyInjectionExtensions)",
       "Bash(npm uninstall:*)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(cat:*)",
+      "Bash($null)"
     ],
     "deny": [],
     "ask": []
