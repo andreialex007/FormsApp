@@ -11,17 +11,36 @@ const props = defineProps<Props>()
   <Observer>
     <div class="min-h-[calc(100vh-4rem)]  py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div class="max-w-2xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-600 rounded-full mb-4">
-            <i class="ri-file-add-fill text-3xl text-white"></i>
+        <!-- Success Message -->
+        <div v-if="props.store.isSubmitted" class="text-center">
+          <div class="bg-white rounded-2xl shadow-xl p-12">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-emerald-100 rounded-full mb-6">
+              <i class="ri-checkbox-circle-fill text-6xl text-emerald-600"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-3">Success!</h2>
+            <p class="text-gray-600 text-lg mb-8">Your information has been submitted successfully.</p>
+            <button
+              @click="props.store.isSubmitted = false; props.store.resetForm()"
+              class="bg-emerald-600 text-white py-3 px-8 rounded-lg text-lg font-bold hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-300 transition duration-200 shadow-lg hover:shadow-xl inline-flex items-center gap-2">
+              <i class="ri-add-circle-line text-xl"></i>
+              Submit Another
+            </button>
           </div>
-          <h1 class="text-4xl font-bold text-gray-900 mb-2">Submit Your Information</h1>
-          <p class="text-gray-600">Please fill out all the fields below</p>
         </div>
 
-        <!-- Message Alert -->
-        <div v-if="props.store.message"
+        <!-- Form -->
+        <div v-else>
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-600 rounded-full mb-4">
+              <i class="ri-file-add-fill text-3xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Submit Your Information</h1>
+            <p class="text-gray-600">Please fill out all the fields below</p>
+          </div>
+
+          <!-- Message Alert -->
+          <div v-if="props.store.message"
              class="mb-6 p-4 rounded-xl flex items-start gap-3 shadow-lg transition-all duration-300 bg-red-50 border-2 border-red-200">
           <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-red-100">
             <i class="ri-error-warning-fill text-xl text-red-600"></i>
@@ -161,10 +180,11 @@ const props = defineProps<Props>()
           </form>
         </div>
 
-        <!-- Info Footer -->
-        <div class="text-center mt-6 text-sm text-gray-600">
-          <i class="ri-shield-check-line mr-1"></i>
-          Your information is secure and will never be shared
+          <!-- Info Footer -->
+          <div class="text-center mt-6 text-sm text-gray-600">
+            <i class="ri-shield-check-line mr-1"></i>
+            Your information is secure and will never be shared
+          </div>
         </div>
       </div>
     </div>

@@ -43,6 +43,8 @@ export default class Store extends NavItem {
   @observable
   message = ''
   @observable
+  isSubmitted = false
+  @observable
   fields = {
     fullName: new FieldState("").validators(
         v => v.trim().length < 2 && "Full name must be at least 2 characters",
@@ -111,7 +113,7 @@ export default class Store extends NavItem {
         content: JSON.stringify(formData)
       })
 
-      this.resetForm()
+      this.isSubmitted = true
     } catch (error: any) {
       const errorMessage = error.response?.data?.detail || error.response?.data?.title || error.message || 'Unknown error'
       this.setMessage('Error submitting form: ' + errorMessage)
