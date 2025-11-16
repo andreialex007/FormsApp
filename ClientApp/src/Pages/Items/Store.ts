@@ -1,6 +1,7 @@
 import { makeObservable, observable, action, computed } from 'mobx'
 import NavItem from '@/Common/NavItem'
 import axios from '@/Common/AxiosConfig'
+import _ from 'lodash'
 
 export interface FormContent {
   fullName: string
@@ -55,6 +56,8 @@ export default class Store extends NavItem {
     dateTo: '',
     contentSearchTerm: ''
   }
+
+  debouncedApplyFilters = _.debounce(() => this.applyFilters(), 500)
 
   constructor() {
     super()
@@ -122,7 +125,20 @@ export default class Store extends NavItem {
 
   @action
   onFilterChange() {
+    this.debouncedApplyFilters()
+  }
+
+  @action
+  resetFilters() {
+    Object.keys(this.filters).forEach(key => (this.filters as any)[key] = '')
     this.applyFilters()
+  }
+
+  @action
+  confirmDelete(id: number) {
+    if (window.confirm('Are you sure you want to delete this submission?')) {
+      this.deleteSubmission(id)
+    }
   }
 
   @action
