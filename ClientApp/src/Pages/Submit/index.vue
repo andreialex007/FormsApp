@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { Observer } from 'mobx-vue-lite'
 import type { Props } from './Store'
-import { countries } from './Store'
+import { countries, genderOptions, getFieldClasses } from './Store'
 import ValidationError from './ValidationError.vue'
 
 const props = defineProps<Props>()
-
-const genderOptions = ['Male', 'Female', 'Other']
 </script>
 
 <template>
@@ -52,12 +50,7 @@ const genderOptions = ['Male', 'Female', 'Other']
                 v-model="props.store.fields.fullName.value"
                 type="text"
                 @blur="props.store.triggerValidate(props.store.fields.fullName)"
-                :class="[
-                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.fields.fullName.dirty && props.store.fields.fullName.error
-                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
-                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
-                ]"
+                :class="getFieldClasses(props.store.fields.fullName)"
                 placeholder="Enter your full name"
               />
               <ValidationError :field="props.store.fields.fullName" />
@@ -74,12 +67,7 @@ const genderOptions = ['Male', 'Female', 'Other']
                 v-model="props.store.fields.email.value"
                 type="email"
                 @blur="props.store.triggerValidate(props.store.fields.email)"
-                :class="[
-                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.fields.email.dirty && props.store.fields.email.error
-                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
-                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
-                ]"
+                :class="getFieldClasses(props.store.fields.email)"
                 placeholder="your.email@example.com"
               />
               <ValidationError :field="props.store.fields.email" />
@@ -95,12 +83,7 @@ const genderOptions = ['Male', 'Female', 'Other']
                 id="country"
                 v-model="props.store.fields.country.value"
                 @blur="props.store.triggerValidate(props.store.fields.country)"
-                :class="[
-                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none bg-white',
-                  props.store.fields.country.dirty && props.store.fields.country.error
-                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
-                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
-                ]"
+                :class="getFieldClasses(props.store.fields.country, 'bg-white')"
               >
                 <option value="">Select your country</option>
                 <option v-for="c in countries" :key="c" :value="c">
@@ -121,12 +104,7 @@ const genderOptions = ['Male', 'Female', 'Other']
                 v-model="props.store.fields.birthDate.value"
                 type="date"
                 @blur="props.store.triggerValidate(props.store.fields.birthDate)"
-                :class="[
-                  'w-full px-4 py-3 rounded-lg transition duration-200 outline-none',
-                  props.store.fields.birthDate.dirty && props.store.fields.birthDate.error
-                    ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
-                    : 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
-                ]"
+                :class="getFieldClasses(props.store.fields.birthDate)"
               />
               <ValidationError :field="props.store.fields.birthDate" />
             </div>

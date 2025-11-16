@@ -18,6 +18,17 @@ export const countries = [
   'Norway'
 ]
 
+export const genderOptions = ['Male', 'Female', 'Other']
+
+export const getFieldClasses = (field: FieldState<any>, additionalClasses = '') => {
+  const baseClasses = `w-full px-4 py-3 rounded-lg transition duration-200 outline-none ${additionalClasses}`
+  const errorClasses = 'border-2 border-red-500 focus:ring-2 focus:ring-red-500'
+  const normalClasses = 'border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent'
+
+  return field.dirty && field.error
+    ? `${baseClasses} ${errorClasses}`
+    : `${baseClasses} ${normalClasses}`
+}
 
 export interface Props {
   store: Store
@@ -108,9 +119,6 @@ export default class Store extends NavItem {
       this.isSubmitting = false
     }
   }
-  
-  
-  
   
   @action
   resetForm() {
