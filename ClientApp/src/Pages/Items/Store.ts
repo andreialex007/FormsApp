@@ -1,11 +1,21 @@
 import { makeObservable, observable, action, computed } from 'mobx'
-import NavItem from '../../Common/NavItem'
+import NavItem from '@/Common/NavItem'
 import axios from '@/Common/AxiosConfig'
+
+export interface FormContent {
+  fullName: string
+  email: string
+  country: string
+  birthDate: string
+  gender: string
+  newsletter: boolean
+}
 
 export interface Submission {
   id: number
   created: string
   content: string
+  parsedContent: FormContent
 }
 
 export interface Props {
@@ -54,6 +64,21 @@ export default class Store extends NavItem {
     return this.submissions.length < this.found
   }
 
+  private parseContent(content: string): FormContent {
+    try {
+      return JSON.parse(content) as FormContent
+    } catch {
+      return {
+        fullName: '',
+        email: '',
+        country: '',
+        birthDate: '',
+        gender: '',
+        newsletter: false
+      }
+    }
+  }
+
   @action
   async loadSubmissions(append = false) {
     this.isLoading = true
@@ -67,8 +92,13 @@ export default class Store extends NavItem {
         contentSearchTerm: this.filterContentSearchTerm || null
       })
 
-      const newSubmissions = response.data.items || []
-      this.submissions = append ? [...this.submissions, ...newSubmissions] : newSubmissions
+      const rawSubmissions = response.data.items || []
+      const parsedSubmissions = rawSubmissions.map((sub: any) => ({
+        ...sub,
+        parsedContent: this.parseContent(sub.content)
+      }))
+
+      this.submissions = append ? [...this.submissions, ...parsedSubmissions] : parsedSubmissions
       this.returned = response.data.returned || 0
       this.found = response.data.found || 0
       this.total = response.data.total || 0

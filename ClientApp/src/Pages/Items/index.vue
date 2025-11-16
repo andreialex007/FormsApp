@@ -5,14 +5,6 @@ import type { Props } from './Store'
 
 const props = defineProps<Props>()
 
-const parseContent = (content: string) => {
-  try {
-    return JSON.parse(content)
-  } catch {
-    return {}
-  }
-}
-
 onMounted(() => props.store.loadSubmissions())
 </script>
 
@@ -51,18 +43,18 @@ onMounted(() => props.store.loadSubmissions())
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col h-[calc(100vh-16rem)]">
           <!-- Header Table with Filters -->
           <div class="overflow-x-auto border-b border-gray-200">
-            <table class="w-full">
+            <table class="w-full table-fixed">
               <thead>
                 <!-- Filter Row -->
                 <tr class="bg-gray-100 border-b border-gray-200">
-                  <th class="px-6 py-3 w-20">
+                  <th class="px-6 py-3" style="width: 120px;">
                     <input
                       type="text"
                       placeholder="ID"
                       class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none"
                     />
                   </th>
-                  <th class="px-6 py-3 w-80">
+                  <th class="px-6 py-3" style="width: 320px;">
                     <div class="flex gap-2">
                       <input
                         type="date"
@@ -83,22 +75,22 @@ onMounted(() => props.store.loadSubmissions())
                       class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none"
                     />
                   </th>
-                  <th class="px-6 py-3 w-32"></th>
+                  <th class="px-6 py-3" style="width: 140px;"></th>
                 </tr>
                 <!-- Labels Row -->
                 <tr class="bg-gray-50 border-b border-gray-200">
-                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">ID</th>
-                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-80">Date</th>
+                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" style="width: 120px;">ID</th>
+                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" style="width: 320px;">Date</th>
                   <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Content</th>
-                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">Actions</th>
+                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" style="width: 140px;">Actions</th>
                 </tr>
               </thead>
             </table>
           </div>
 
           <!-- Content Table with Scroll -->
-          <div class="flex-1 overflow-auto">
-            <table class="w-full">
+          <div class="flex-1 overflow-y-overlay" style="overflow-y: overlay;">
+            <table class="w-full table-fixed">
               <tbody class="divide-y divide-gray-200">
                 <tr v-if="props.store.submissions.length === 0 && !props.store.isLoading">
                   <td colspan="4" class="px-6 py-12 text-center text-gray-500">
@@ -108,23 +100,23 @@ onMounted(() => props.store.loadSubmissions())
                 </tr>
                 <tr v-for="submission in props.store.submissions" :key="submission.id"
                     class="hover:bg-gray-50 transition duration-150">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-20">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" style="width: 120px;">
                     #{{ submission.id }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 w-80">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600" style="width: 320px;">
                     {{ new Date(submission.created).toLocaleString() }}
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-600">
                     <div class="max-w-2xl">
-                      <p class="font-medium text-gray-900">{{ parseContent(submission.content).fullName || 'N/A' }}</p>
+                      <p class="font-medium text-gray-900">{{ submission.parsedContent.fullName || 'N/A' }}</p>
                       <p class="text-gray-500 text-xs mt-1">
-                        {{ parseContent(submission.content).email || '' }}
-                        <span v-if="parseContent(submission.content).country"> • {{ parseContent(submission.content).country }}</span>
-                        <span v-if="parseContent(submission.content).gender"> • {{ parseContent(submission.content).gender }}</span>
+                        {{ submission.parsedContent.email || '' }}
+                        <span v-if="submission.parsedContent.country"> • {{ submission.parsedContent.country }}</span>
+                        <span v-if="submission.parsedContent.gender"> • {{ submission.parsedContent.gender }}</span>
                       </p>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm w-32">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm" style="width: 140px;">
                     <button
                       @click="props.store.deleteSubmission(submission.id)"
                       class="text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1.5 font-medium">
