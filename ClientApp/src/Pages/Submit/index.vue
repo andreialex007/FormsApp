@@ -22,9 +22,25 @@ const genderOptions = ['Male', 'Female', 'Other']
           <p class="text-gray-600">Please fill out all the fields below</p>
         </div>
 
+        <!-- Message Alert -->
+        <div v-if="props.store.message"
+             class="mb-6 p-4 rounded-xl flex items-start gap-3 shadow-lg transition-all duration-300 bg-red-50 border-2 border-red-200">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-red-100">
+            <i class="ri-error-warning-fill text-xl text-red-600"></i>
+          </div>
+          <div class="flex-1 flex items-center font-bold text-red-700 h-full text-base/8">
+            {{ props.store.message }}
+          </div>
+          <button
+            @click="props.store.clearMessage()"
+            class="flex-shrink-0 hover:bg-opacity-20 rounded-lg p-1 transition text-red-600 hover:bg-red-600">
+            <i class="ri-close-line text-xl"></i>
+          </button>
+        </div>
+
         <!-- Form Card -->
         <div class="bg-white rounded-2xl shadow-xl p-8 ">
-          <form @submit.prevent="props.store.submitForm()" class="space-y-3">
+          <form @submit.prevent="props.store.triggerSubmit()" class="space-y-3">
             <!-- Full Name (Text) -->
             <div>
               <label for="fullName" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
@@ -127,7 +143,7 @@ const genderOptions = ['Male', 'Female', 'Other']
                     v-model="props.store.fields.gender.value"
                     type="radio"
                     :value="option"
-                    @blur="props.store.fields.gender.dirty = true"
+                    @blur="props.store.triggerValidate(props.store.fields.gender)"
                     class="w-5 h-5 text-gray-600 border-gray-300 focus:ring-gray-500 cursor-pointer"
                   />
                   <span class="ml-2 text-gray-700 group-hover:text-gray-600 transition">{{ option }}</span>
@@ -156,7 +172,8 @@ const genderOptions = ['Male', 'Female', 'Other']
               <button
                 type="submit"
                 :disabled="props.store.isSubmitting"
-                class="w-full bg-emerald-600 text-white py-4 px-8 rounded-lg text-lg font-bold hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl"
+                class="w-full bg-emerald-600 text-white py-4 px-8 rounded-lg text-lg font-bold hover:bg-emerald-700 focus:ring-4 
+                focus:ring-emerald-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl"
               >
                 <i v-if="!props.store.isSubmitting" class="ri-send-plane-fill mr-2 text-xl"></i>
                 <i v-else class="ri-loader-4-line mr-2 animate-spin text-xl"></i>

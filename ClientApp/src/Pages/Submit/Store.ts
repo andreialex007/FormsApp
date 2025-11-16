@@ -3,6 +3,7 @@ import NavItem from '../../Common/NavItem'
 import axios from '@/Common/AxiosConfig'
 import { FieldState, FormState } from "formstate";
 import _ from "lodash";
+import {sleep} from "@/Common/Utilities.ts";
 
 export const countries = [
   'USA',
@@ -28,6 +29,8 @@ export default class Store extends NavItem {
   icon = 'file-add-fill'
   @observable
   isSubmitting = false
+  @observable
+  message = ''
   @observable
   fields = {
     fullName: new FieldState("").validators(
@@ -67,10 +70,26 @@ export default class Store extends NavItem {
   }
 
   @action
-  async submitForm() {
+  setMessage(message: string) {
+    this.message = message
+  }
+
+  @action
+  clearMessage() {
+    this.message = ''
+  }
+
+  @action
+  async triggerSubmit() {
+    this.clearMessage()
     Object.values(this.fields).forEach(x => this.triggerValidate(x))
+    await sleep(1);
+    await this.submitForm()
+  }
+  @action
+  async submitForm() {
     if (!this.isValid) {
-      alert('Please fix validation errors before submitting')
+      this.setMessage('Please fix validation errors before submitting')
       return
     }
 
@@ -81,15 +100,15 @@ export default class Store extends NavItem {
         content: JSON.stringify(formData)
       })
 
-      alert('Form submitted successfully!')
       this.resetForm()
     } catch (error: any) {
       const errorMessage = error.response?.data?.detail || error.response?.data?.title || error.message || 'Unknown error'
-      alert('Error submitting form: ' + errorMessage)
+      this.setMessage('Error submitting form: ' + errorMessage)
     } finally {
       this.isSubmitting = false
     }
   }
+  
   
   
   

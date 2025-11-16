@@ -24,11 +24,21 @@ builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("FormsAppDb"));
 builder.Services.AddValidatorsFromAssemblyContaining<SubmissionSearchDto>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseStatusCodePages();
+app.UseCors();
 
 using (var scope = app.Services.CreateScope())
 {

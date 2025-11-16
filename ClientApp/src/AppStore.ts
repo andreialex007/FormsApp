@@ -1,6 +1,6 @@
 import { makeObservable, observable, computed, action } from 'mobx'
 import type NavItem from './Common/NavItem'
-import { Utilities } from './Common/Utilities'
+import {discoverAllPages} from './Common/Utilities'
 import HomeStore from './Pages/Home/Store'
 import AboutStore from './Pages/About/Store'
 import SubmitStore from './Pages/Submit/Store'
@@ -35,7 +35,7 @@ export class AppStore {
   }
 
   get allPages() {
-    return Utilities.discoverAllPages(this.navItems)
+    return discoverAllPages(this.navItems)
   }
 }
 
